@@ -1,4 +1,4 @@
-# ViNote
+# ViNote (WIP)
 
 A C note-taking application with OpenGL rendering.
 
