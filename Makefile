@@ -13,12 +13,16 @@ GLFWFLAGS = -I$(GLFWDIR)/include -L$(GLFWDIR)/lib-mingw-w64
 FREETYPE_DIR = libs/external/freetype
 FREETYPE_FLAGS = -I$(FREETYPE_DIR) -L$(FREETYPE_DIR)
 
-LIBFLAGS =  $(GLFWFLAGS) $(GLEWFLAGS) $(FREETYPE_FLAGS) $(ECTERNAL_FLAGS)
+CK_DIR = ../Ck
+CK_BUILD_DEBUG = $(CK_DIR)/build/Debug
+CK_FLAGS = -I$(CK_DIR)/libs -L$(CK_BUILD_DEBUG)
 
-LIBS = -lglew32 -lglfw3 -lopengl32 -lgdi32 -luser32 -lshell32 -lfreetype
+LIBFLAGS =  $(GLFWFLAGS) $(GLEWFLAGS) $(FREETYPE_FLAGS) $(CK_FLAGS)
+
+LIBS = -lCK -lglew32 -lglfw3 -lopengl32 -lgdi32 -luser32 -lshell32 -lfreetype
 
 SRCDIR = src
-SRCS = $(wildcard $(SRCDIR)/*.c) $(wildcard $(SRCDIR)/*.cpp)
+SRCS = $(wildcard $(SRCDIR)/*.c)
 
 HEADERS = libs/vinote.h
 
@@ -40,13 +44,17 @@ debug: $(TARGET_DEBUG)
 release: CFLAGS += $(RELEASEFLAGS) $(LIBFLAGS)
 release: $(TARGET_RELEASE)
 
-$(TARGET_DEBUG): $(DEBUG_OBJS)
+$(TARGET_DEBUG): $(DEBUG_OBJS) $(CK_BUILD_DEBUG)/libCK.a
 	mkdir -p $(DEBUG_DIR)
 	$(CC) $(CFLAGS)  -o $(TARGET_DEBUG) $(DEBUG_OBJS) $(LDFLAGS) $(LIBS)
 
 $(TARGET_RELEASE): $(RELEASE_OBJS)
 	mkdir -p $(RELEASE_DIR)
 	$(CC) $(CFLAGS) -o $(TARGET_RELEASE) $(RELEASE_OBJS) $(LDFLAGS) $(LIBS)
+
+# Ensure CK static library is built before linking
+$(CK_BUILD_DEBUG)/libCK.a:
+	$(MAKE) -C $(CK_DIR) static-debug
 
 $(DEBUG_DIR)/%.obj: $(SRCDIR)/%.c $(HEADERS)
 	mkdir -p $(DEBUG_DIR)
