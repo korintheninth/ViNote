@@ -1,0 +1,103 @@
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: #e3e3e3ff;
+}
+
+#canvas {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 16px;
+}
+
+#connection-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.connection-line {
+  stroke: #31c6ff;
+  stroke-width: 2;
+  fill: none;
+}
+
+.relation-line {
+  stroke: #ad2bb6ff;
+  stroke-width: 2;
+  fill: none;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.relation-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  background-color: #00000050;
+  border-radius: 6px;
+}
+
+.relation-slot {
+  display: flex;
+  justify-content: center;
+}
+
+.inputs, .outputs {
+  display: flex;
+  flex-direction: column;
+  align-items: first baseline;
+  gap: 8px;
+}
+
+.input {
+  background-color: #c9a66b;
+  height: 15px;
+  width: 10px;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  border-style: none;
+  box-sizing: border-box;
+}
+
+.output {
+  background-color: aqua;
+  height: 15px;
+  width: 10px;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  border-style: none;
+}
+
+.relation {
+  background-color: #92109eff;
+  height: 10px;
+  width: 15px;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  border-style: none;
+}
+
+:host(.selected) button {
+  border: 1px dashed rgba(255, 0, 0, 1);
+  box-sizing: border-box;
+  border-width: 2px;
+}
+

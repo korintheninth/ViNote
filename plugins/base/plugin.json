@@ -1,0 +1,16 @@
+{
+    "name": "base",
+    "version": "1.0.0",
+    "nodes": [
+        {
+            "typeId": "textNode",
+            "uiEntry": "dist/textNodeUI.js",
+            "logicEntry": "dist/plugin.js"
+        },
+        {
+            "typeId": "functionNode",
+            "uiEntry": "dist/functionNodeUI.js",
+            "logicEntry": "dist/plugin.js"
+        }
+    ]
+}
