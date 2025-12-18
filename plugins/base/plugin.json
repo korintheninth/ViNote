@@ -4,12 +4,17 @@
     "nodes": [
         {
             "typeId": "textNode",
-            "uiEntry": "dist/textNodeUI.js",
+            "uiEntry": "dist/textNode.js",
             "logicEntry": "dist/plugin.js"
         },
         {
             "typeId": "functionNode",
-            "uiEntry": "dist/functionNodeUI.js",
+            "uiEntry": "dist/functionNode.js",
+            "logicEntry": "dist/plugin.js"
+        },
+        {
+            "typeId": "derivativeNode",
+            "uiEntry": "dist/DerivativeNode.js",
             "logicEntry": "dist/plugin.js"
         }
     ]

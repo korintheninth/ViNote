@@ -1,5 +1,6 @@
 import { removeConnections } from "./line_canvas.js";
 import { connectNodes, connectRelation, deleteNodeInstance, registry } from "./node_manager.js";
+import { getMousePosition } from "./utils.js";
 
 export class relationConnection extends HTMLElement {
 	constructor() {
@@ -191,21 +192,20 @@ class nodeContainer extends HTMLElement {
 	}
 
 	startMove(e) {
-		this.pointerInit = {x: e.clientX, y: e.clientY};
+		this.pointerInit = getMousePosition(e);
 		e.stopPropagation();
 	}
 	move(e) {
 		if (this.pointerInit === null) {
 			return;
 		}
-		const offsetx = e.clientX - this.pointerInit.x;
-		const offsety = e.clientY - this.pointerInit.y;
+		const offsetx = (getMousePosition(e).left - this.pointerInit.left);
+		const offsety = (getMousePosition(e).top - this.pointerInit.top);
 		registry.nodeInstances[this.node.nodeId].position.x += offsetx;
 		registry.nodeInstances[this.node.nodeId].position.y += offsety;
 		this.style.left = `${parseFloat(this.style.left) + offsetx}px`;
 		this.style.top = `${parseFloat(this.style.top) + offsety}px`;
-		this.pointerInit.x = e.clientX;
-		this.pointerInit.y = e.clientY;
+		this.pointerInit = getMousePosition(e);
 		e.stopPropagation();
 	}
 

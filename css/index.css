@@ -1,11 +1,8 @@
 body {
   height: 100%;
   margin: 0;
-}
-
-body {
   font-family: sans-serif;
-  background-color: #e3e3e3ff;
+  overflow: hidden;
 }
 
 #canvas {
@@ -14,6 +11,9 @@ body {
   height: 100vh;
   box-sizing: border-box;
   padding: 16px;
+  background-color: #e3e3e3ff;
+  transform-origin: 0 0;
+  overflow: hidden;
 }
 
 #connection-layer {
@@ -35,6 +35,18 @@ body {
   stroke: #ad2bb6ff;
   stroke-width: 2;
   fill: none;
+}
+
+.control-point {
+  fill: #ffffff;
+  stroke: #666666;
+  stroke-width: 1.5;
+  transition: fill 0.15s ease, transform 0.15s ease;
+}
+
+.control-point:hover {
+  fill: #31c6ff;
+  stroke: #1a8ab8;
 }
 
 .wrapper {
@@ -99,5 +111,26 @@ body {
   border: 1px dashed rgba(255, 0, 0, 1);
   box-sizing: border-box;
   border-width: 2px;
+}
+
+.insert-menu {
+  display: flex;
+  flex-direction: column;
+}
+
+#insertMenuList {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+#insertMenuList button {
+  display: block;
+  width: 100%;
+  border-style: none;
+}
+
+#insertMenuList button:hover {
+  background-color: #00000050;
 }
 

@@ -157,14 +157,17 @@ export function connectNodes(connection) {
         connection.classList.add('selected');
     }
     if (connectNodes.input && connectNodes.output) {
-        if (connectNodes.input.sender) {
-            removeLine(connectNodes.input.sender, connectNodes.input);
-            connectNodes.input.sender.targets.delete(connectNodes.input);
-        }
-        if (connectNodes.input.node !== connectNodes.output.node) {
-            connectNodes.input.sender = connectNodes.output;
-            connectNodes.output.targets.add(connectNodes.input);
-            registerLine(connectNodes.output, connectNodes.input, 'connection-line');
+        if (connectNodes.input.type == connectNodes.output.type) {
+            if (connectNodes.input.sender) {
+                removeLine(connectNodes.input.sender, connectNodes.input);
+                connectNodes.input.sender.targets.delete(connectNodes.input);
+            }
+            if (connectNodes.input.node !== connectNodes.output.node) {
+                connectNodes.input.sender = connectNodes.output;
+                connectNodes.output.targets.add(connectNodes.input);
+                registerLine(connectNodes.output, connectNodes.input, 'connection-line');
+                connectNodes.input.changed(connectNodes.output.value);
+            }
         }
         connectNodes.input.classList.remove('selected');
         connectNodes.output.classList.remove('selected');
