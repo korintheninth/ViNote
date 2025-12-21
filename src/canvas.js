@@ -1,5 +1,7 @@
 import { loadPlugins } from "./node_manager.js";
 import "./insert_menu.js";
+import "./cursor.js";
+import "./keybinds.js";
 import { zoomIn, zoomOut } from "./zoom.js";
 import { getMousePosition } from "./utils.js";
 

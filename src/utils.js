@@ -1,9 +1,17 @@
 import { getZoomLevel } from "./zoom.js";
+import { isSnapEnabled, snapToGrid } from "./cursor.js";
+
 let canvas = document.getElementById('canvas');
 
 export function getMousePosition(event) {
     const rect = canvas.getBoundingClientRect();
-    const left = event.clientX - rect.left;
-    const top = event.clientY - rect.top;
-    return { left: left / getZoomLevel(), top: top / getZoomLevel() };
+    let left = (event.clientX - rect.left) / getZoomLevel();
+    let top = (event.clientY - rect.top) / getZoomLevel();
+    
+    if (isSnapEnabled()) {
+        left = snapToGrid(left);
+        top = snapToGrid(top);
+    }
+    
+    return { left, top };
 }
