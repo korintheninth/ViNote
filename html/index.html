@@ -5,11 +5,11 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.wolframalpha.com"
     />
     <meta
       http-equiv="X-Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.wolframalpha.com"
     />
     <title>Hello from Electron renderer!</title>
     <link rel="stylesheet" href="../css/index.css" />
@@ -22,8 +22,10 @@
       <div id="grid-axis-left"></div>
       <div id="coord-display">0, 0</div>
     </div>
-    <div id="canvas">
-      <svg id="connection-layer"></svg>
+    <div id="scroll-wrapper">
+      <div id="canvas">
+        <svg id="connection-layer"></svg>
+      </div>
     </div>
     <script type="module" src="../src/canvas.js"></script>
   </body>

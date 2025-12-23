@@ -1,35 +1,56 @@
 import { updateZoom } from './grid.js';
+import { setZoom as setInfiniteScrollZoom, updateCanvasSize } from './infinite_scroll.js';
 
 let zoomLevel = 1;
 let zoomStep = 0.05;
 let maxZoomLevel = 10;
 let minZoomLevel = 0.1;
-let maxSize = {width: 0, height: 0};
 let canvas = document.getElementById('canvas');
-
-const AXIS_LEFT_WIDTH = 40;
-const AXIS_TOP_HEIGHT = 24;
+let scrollWrapper = document.getElementById('scroll-wrapper');
 
 export function getZoomLevel() {
     return zoomLevel
 }
 
 function applyZoom() {
-    const canvasWidth = (window.innerWidth - AXIS_LEFT_WIDTH) / zoomLevel;
-    const canvasHeight = (window.innerHeight - AXIS_TOP_HEIGHT) / zoomLevel;
-    
     canvas.style.transform = `scale(${zoomLevel})`;
-    canvas.style.width = `${canvasWidth}px`;
-    canvas.style.height = `${canvasHeight}px`;
+    setInfiniteScrollZoom(zoomLevel);
+    updateCanvasSize();
     updateZoom(zoomLevel);
 }
 
-export function zoomIn(pos) {
-    zoomLevel = Math.min(zoomLevel * (1 + zoomStep), maxZoomLevel);
-    applyZoom();
+export function zoomIn(event) {
+    const oldZoom = zoomLevel;
+    const newZoom = Math.min(zoomLevel * (1 + zoomStep), maxZoomLevel);
+    applyZoomToPoint(event, oldZoom, newZoom);
 }
 
-export function zoomOut(pos) {
-    zoomLevel = Math.max(zoomLevel * (1 - zoomStep), minZoomLevel);
+export function zoomOut(event) {
+    const oldZoom = zoomLevel;
+    const newZoom = Math.max(zoomLevel * (1 - zoomStep), minZoomLevel);
+    applyZoomToPoint(event, oldZoom, newZoom);
+}
+
+function applyZoomToPoint(event, oldZoom, newZoom) {
+    if (!scrollWrapper || oldZoom === newZoom) return;
+    
+    // Get mouse position relative to the scroll wrapper viewport
+    const wrapperRect = scrollWrapper.getBoundingClientRect();
+    const mouseX = event.clientX - wrapperRect.left;
+    const mouseY = event.clientY - wrapperRect.top;
+    
+    // Calculate the canvas position under the mouse (before zoom)
+    const canvasX = (scrollWrapper.scrollLeft + mouseX) / oldZoom;
+    const canvasY = (scrollWrapper.scrollTop + mouseY) / oldZoom;
+    
+    // Apply the new zoom level
+    zoomLevel = newZoom;
     applyZoom();
+    
+    // Calculate new scroll position to keep the same canvas point under the mouse
+    const newScrollLeft = canvasX * newZoom - mouseX;
+    const newScrollTop = canvasY * newZoom - mouseY;
+    
+    scrollWrapper.scrollLeft = newScrollLeft;
+    scrollWrapper.scrollTop = newScrollTop;
 }

@@ -2,6 +2,7 @@ import { getGridStep } from './grid.js';
 import { getZoomLevel } from './zoom.js';
 
 const canvas = document.getElementById('canvas');
+const scrollWrapper = document.getElementById('scroll-wrapper');
 
 // Create custom cursor element
 const customCursor = document.createElement('div');
@@ -20,24 +21,26 @@ export function snapToGrid(value) {
 function updateCursor(event) {
     if (!snapEnabled) return;
     
-    const rect = canvas.getBoundingClientRect();
+    const wrapperRect = scrollWrapper ? scrollWrapper.getBoundingClientRect() : canvas.getBoundingClientRect();
     const zoomLevel = getZoomLevel();
+    const scrollLeft = scrollWrapper ? scrollWrapper.scrollLeft : 0;
+    const scrollTop = scrollWrapper ? scrollWrapper.scrollTop : 0;
     
-    // Get mouse position relative to canvas
-    const screenX = event.clientX - rect.left;
-    const screenY = event.clientY - rect.top;
+    // Get mouse position relative to scroll wrapper viewport
+    const screenX = event.clientX - wrapperRect.left;
+    const screenY = event.clientY - wrapperRect.top;
     
-    // Convert to canvas coordinates
-    const canvasX = screenX / zoomLevel;
-    const canvasY = screenY / zoomLevel;
+    // Convert to canvas coordinates (including scroll offset)
+    const canvasX = (screenX + scrollLeft) / zoomLevel;
+    const canvasY = (screenY + scrollTop) / zoomLevel;
     
     // Snap to grid
     const snappedX = snapToGrid(canvasX);
     const snappedY = snapToGrid(canvasY);
     
     // Convert back to screen coordinates
-    const cursorScreenX = rect.left + (snappedX * zoomLevel);
-    const cursorScreenY = rect.top + (snappedY * zoomLevel);
+    const cursorScreenX = wrapperRect.left + (snappedX * zoomLevel - scrollLeft);
+    const cursorScreenY = wrapperRect.top + (snappedY * zoomLevel - scrollTop);
     
     customCursor.style.left = `${cursorScreenX}px`;
     customCursor.style.top = `${cursorScreenY}px`;
@@ -47,11 +50,12 @@ function updateCursor(event) {
 export function toggleSnapCursor() {
     snapEnabled = !snapEnabled;
     
+    const target = scrollWrapper || canvas;
     if (snapEnabled) {
-        canvas.classList.add('hide-cursor');
+        target.classList.add('hide-cursor');
         customCursor.classList.add('visible');
     } else {
-        canvas.classList.remove('hide-cursor');
+        target.classList.remove('hide-cursor');
         customCursor.classList.remove('visible');
     }
     
@@ -71,13 +75,14 @@ export function setSnapEnabled(enabled) {
 // Event listeners
 document.addEventListener('mousemove', updateCursor);
 
-canvas.addEventListener('mouseenter', () => {
+const mouseTarget = scrollWrapper || canvas;
+mouseTarget.addEventListener('mouseenter', () => {
     if (snapEnabled) {
         customCursor.classList.add('visible');
     }
 });
 
-canvas.addEventListener('mouseleave', () => {
+mouseTarget.addEventListener('mouseleave', () => {
     customCursor.classList.remove('visible');
 });
 

@@ -1,5 +1,6 @@
 import { registerLine, removeLine } from './line_canvas.js';
 import { inputConnection, outputConnection } from './node_container.js';
+import { updateContentBounds } from './infinite_scroll.js';
 
 const nodeRequire =
   typeof window !== 'undefined' && typeof window.require === 'function'
@@ -111,6 +112,9 @@ export function addNodeInstance(nodeInstance) {
 
 	canvas.appendChild(container);
 
+    // Update content bounds for infinite scroll
+    updateContentBounds();
+
     def.logic.onCreate?.(nodeInstance);
     
 	requestAnimationFrame(() => {
@@ -130,6 +134,9 @@ export function deleteNodeInstance(id) {
 
     def?.logic?.onDelete?.(nodeInstance);
     nodeInstance.nodeEl?.container?.remove();
+
+    // Update content bounds after removal
+    updateContentBounds();
 }
 
 export function getNextId() {

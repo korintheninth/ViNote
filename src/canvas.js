@@ -4,12 +4,16 @@ import "./cursor.js";
 import "./keybinds.js";
 import { zoomIn, zoomOut } from "./zoom.js";
 import { getMousePosition } from "./utils.js";
+import { initInfiniteScroll } from "./infinite_scroll.js";
 
 const canvas = document.getElementById('canvas');
 
 if (!canvas) {
     throw new Error('Canvas container not found');
 }
+
+// Initialize infinite scroll
+initInfiniteScroll();
 
 loadPlugins()
     .then(() => {
@@ -37,9 +41,9 @@ canvas.addEventListener('wheel', event => {
     if (event.ctrlKey) {
         event.preventDefault();
         if (event.deltaY < 0) {
-            zoomIn(getMousePosition(event));
+            zoomIn(event);
         } else {
-            zoomOut(getMousePosition(event));
+            zoomOut(event);
         }
     }
 });
