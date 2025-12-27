@@ -164,7 +164,7 @@ export function connectNodes(connection) {
         connection.classList.add('selected');
     }
     if (connectNodes.input && connectNodes.output) {
-        if (connectNodes.input.type == connectNodes.output.type) {
+        if (connectNodes.input.type == connectNodes.output.type || connectNodes.input.type == 'any' || connectNodes.output.type == 'any') {
             if (connectNodes.input.sender) {
                 removeLine(connectNodes.input.sender, connectNodes.input);
                 connectNodes.input.sender.targets.delete(connectNodes.input);
